@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "Tree.h"
 
+// good practice to sort your includes... include STL first then your own headers
 #include <vector>
 #include <sstream>
 #include "Node.h"
 #include <iostream>
 
-Tree::Tree(): topOfTree(nullptr)
+Tree::Tree(): topOfTree(nullptr) // in new version of C++ you can assign topOfTree in your .h file
 {
 }
 
 Tree::~Tree()
 {
-    delete topOfTree;
+    delete topOfTree; // consider using std::unique_ptr<Node>
 }
 
 void Tree::setup_line(const std::string& line)
@@ -41,7 +42,7 @@ void Tree::setup_line(const std::string& line)
         topOfTree = new Node<std::string>(nullptr, childData);
 }
 
-bool Tree::parse_stream(std::istream& stream)
+bool Tree::parse_stream(std::istream& stream) // you are using CamelCase and whatever this_weird_notation interchangably, keep it consistent
 {
     std::string line;
     while (std::getline(stream, line))
@@ -51,17 +52,17 @@ bool Tree::parse_stream(std::istream& stream)
     return true;
 }
 
-std::string Tree::PrintTree() const
+std::string Tree::PrintTree() const // return const char*
 {
     return topOfTree->PrintTree();
 }
 
-std::string Tree::PrintLeaves() const
+std::string Tree::PrintLeaves() const // return const char*
 {
     return topOfTree->PrintLeaves();
 }
 
-std::string Tree::Find(const std::string& name) const
+std::string Tree::Find(const std::string& name) const // return const char*
 {
     return topOfTree->Find(name);
 }
