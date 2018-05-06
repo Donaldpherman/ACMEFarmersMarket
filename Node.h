@@ -1,5 +1,4 @@
-#ifndef _NODE_H_
-#define _NODE_H_
+#pragma once
 #include <vector>
 #include <deque>
 
@@ -25,18 +24,17 @@ public:
     Node<T>* get_parent() const;
     int get_num_children() const;
     int get_depth_of_node() const;
+    const Node<T>* find_top_of_the_tree() const;
 
-    void PrintTree() const;
-    void PrintLeaves() const;
-    void Find(const std::string& name) const;
+    std::string PrintTree() const;
+    std::string PrintLeaves() const;
+    std::string Find(const std::string& name) const;
 
     static Node<T>* find_node_in_tree(Node<T>* node, const T& data);
 
-    static void PrintTree(const Node<T>* top);
-    static void PrintLeaves(const Node<T>* top);
-    static void Find(const Node<T>* top, const std::string& name);
+    static void PrintTree(const Node<T>* top, std::string& outString);
+    static void PrintLeaves(const Node<T>* top, std::string& outString);
+    static void Find(const Node<T>* top, const std::string& name, std::string& outString);
 
 };
 #include "Node.inl"
-
-#endif // _NODE_H_

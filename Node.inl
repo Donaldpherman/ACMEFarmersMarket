@@ -1,4 +1,6 @@
 #include "Node.h"
+#include <assert.h>
+
 template<class T>
 Node<T>::Node(Node<T>* parent, T data) : parent_(parent), data_(data)
 {
@@ -26,7 +28,7 @@ Node<T>& Node<T>::operator=(const Node<T>* node)
 template<class T>
 Node<T>::~Node()
 {
-    for (Node<T>* childNode : children)
+    for (Node<T>* childNode : children_)
         delete childNode;
 }
 
@@ -95,31 +97,39 @@ int Node<T>::get_depth_of_node() const
 }
 
 template<class T>
-void Node<T>::PrintTree() const
+const Node<T>* Node<T>::find_top_of_the_tree() const
 {
     const Node<T>* top = this;
     while (top->parent_ != nullptr)
         top = top->parent_;
-    PrintTree(top);
+    return top;
 }
 
 template<class T>
-void Node<T>::PrintLeaves() const
+std::string Node<T>::PrintTree() const
 {
-    const Node<T>* top = this;
-    while (top->parent_ != nullptr)
-        top = top->parent_;
-    PrintLeaves(top);
+    const Node<T>* top = find_top_of_the_tree();
+    std::string output;
+    PrintTree(top, output);
+    return output;
 }
 
 template<class T>
-void Node<T>::Find(const std::string& name) const
+std::string Node<T>::PrintLeaves() const
 {
-    const Node<T>* top = this;
-    while (top->parent_ != nullptr)
-        top = top->parent_;
+    const Node<T>* top = find_top_of_the_tree();
+    std::string output;
+    PrintLeaves(top, output);
+    return output;
+}
 
-    Find(top, name);
+template<class T>
+std::string Node<T>::Find(const std::string& name) const
+{
+    const Node<T>* top = find_top_of_the_tree();
+    std::string output;
+    Find(top, name, output);
+    return output;
 }
 
 template<class T>
@@ -143,38 +153,38 @@ Node<T>* Node<T>::find_node_in_tree(Node<T>* node, const T& data)
 }
 
 template<class T>
-void Node<T>::PrintTree(const Node<T>* top)
+void Node<T>::PrintTree(const Node<T>* top, std::string& outString)
 {
     unsigned int depth = top->get_depth_of_node();
     for (unsigned int i = 0; i < depth; ++i)
-        std::cout << '-';
-    std::cout << top->get_data();
-    std::cout << std::endl;
+        outString.append("-");
+    outString.append(top->get_data());
+    outString.append("\n");
     for (Node<T>*child : top->children_)
-        PrintTree(child);
+        PrintTree(child, outString);
 }
 
 template<class T>
-void Node<T>::PrintLeaves(const Node<T>* top)
+void Node<T>::PrintLeaves(const Node<T>* top, std::string& outString)
 {
     if (top->get_num_children() == 0)
     {
-        std::cout << top->get_data() << std::endl;
+        outString.append(top->get_data() + "\n");
     }
     else
     {
         for (Node<T>*child : top->children_)
-            PrintLeaves(child);
+            PrintLeaves(child, outString);
     }
 }
 
 template<class T>
-void Node<T>::Find(const Node<T>* top, const std::string& name)
+void Node<T>::Find(const Node<T>* top, const std::string& name, std::string& outString)
 {
     if (top->get_data() != name)
     {
         for (Node<T>* child : top->children_)
-            Find(child, name);
+            Find(child, name, outString);
     }
     else
     {
@@ -184,12 +194,12 @@ void Node<T>::Find(const Node<T>* top, const std::string& name)
             toPrint.push_front(top->get_data());
             top = top->parent_;
         }
-
         for (unsigned int i = 0; i < toPrint.size(); ++i)
         {
-            std::cout << toPrint.at(i);
+            outString.append(toPrint.at(i));
             if (i < toPrint.size() - 1)
-                std::cout << "-";
+                outString.append("-");
         }
+        outString.append("\n");
     }
 }
