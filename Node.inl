@@ -7,28 +7,31 @@ Node<T>::Node(Node<T>* parent, T data) : parent_(parent), data_(data)
 }
 
 template<class T>
-Node<T>::Node(Node<T>* node)
+Node<T>::Node(Node<T>* node) // in copy ctor you always pass const: Node<T>::Node(const Node<T>* other)
 {
     data_ = node->get_data();
-    if (node->get_parent() == nullptr)
+    if (node->get_parent() == nullptr) //  if (node->get_parent()) - this is c++
         parent_ = nullptr
     else
         parent_ = new Node(node_->get_parent());
-    children_(children_);
+    children_(children_); // what exactly does that do?
 }
 
 template<class T>
-Node<T>& Node<T>::operator=(const Node<T>* node)
+Node<T>& Node<T>::operator=(const Node<T>* node) // I would rename node->other
 {
+    // this is scary your copy ctor is a gateway to invalid memory
     data_ = node->get_data();
-    parent_ = node_->get_parent();
-    children_ = node->children;
+    parent_ = node_->get_parent(); // you are copying pointer to the same address
+    children_ = node->children; // you are copying collection of pointers to the same address
+    // consider what would happen when the node that you pass to this copy ctor is deleted
+    // you are still pointing to the same address locations, but now the are invalid
 }
 
 template<class T>
 Node<T>::~Node()
 {
-    for (Node<T>* childNode : children_)
+    for (Node<T>* childNode : children_) // just use smart pointers
         delete childNode;
 }
 
@@ -47,19 +50,24 @@ void Node<T>::set_data(const T& data)
 template<class T>
 void Node<T>::add_child(const T& data)
 {
+    // check if already exists
+    // something like:
+    // if (!std::find_if(children_.begin(), children_.end(), [data](const Node<T>* node) -> { return node->data == data; }) {
     children_.push_back(new Node<T>(this, data));
 }
 
 template<class T>
 void Node<T>::remove_child(const size_t& indx)
 {
-    children_.erase(children.begin() + indx);
+    children_.erase(children.begin() + indx); // what about calling delete on your removed node? Memory leak.
+    // again if you used a shared_ptr here you wont have to worry about it
+    // what if indx is greater than children collection?
 }
 
 template<class T>
 Node<T>* Node<T>::find_child(const T& data) const
 {
-    for (unsigned i = 0; i < children_.size(); i++)
+    for (unsigned i = 0; i < children_.size(); i++) // what is unsigned? use int or size_t
         if (children_[i]->get_data() == data)
             return children_[i];
     return nullptr;
@@ -68,17 +76,18 @@ Node<T>* Node<T>::find_child(const T& data) const
 template<class T>
 Node<T>* Node<T>::get_child(const size_t& indx) const
 {
+    // again check if within bounds
     return children_[indx];
 }
 
 template<class T>
-Node<T>* Node<T>::get_parent() const
+Node<T>* Node<T>::get_parent() const // ideally you would always return const Node<T>*
 {
     return parent_;
 }
 
 template<class T>
-int Node<T>::get_num_children() const
+int Node<T>::get_num_children() const // your '_' is giving me brain seizures...
 {
     return children_.size();
 }
@@ -87,7 +96,7 @@ template<class T>
 int Node<T>::get_depth_of_node() const
 {
     Node<T>* top = parent_;
-    unsigned int depth = 0;
+    unsigned int depth = 0; // no reason for unsigned unless you are doing some funky performance/memory optimization, use int
     while (top != nullptr)
     {
         top = top->parent_;
@@ -97,7 +106,7 @@ int Node<T>::get_depth_of_node() const
 }
 
 template<class T>
-const Node<T>* Node<T>::find_top_of_the_tree() const
+const Node<T>* Node<T>::find_top_of_the_tree() const // can combine it with function above
 {
     const Node<T>* top = this;
     while (top->parent_ != nullptr)
@@ -120,11 +129,11 @@ std::string Node<T>::PrintLeaves() const
     const Node<T>* top = find_top_of_the_tree();
     std::string output;
     PrintLeaves(top, output);
-    return output;
+    return output; // return  PrintLeaves(top); - isn't that better? :)
 }
 
 template<class T>
-std::string Node<T>::Find(const std::string& name) const
+std::string Node<T>::Find(const std::string& name) const // if you are onlt using it with strings remove template class altogether this is messy
 {
     const Node<T>* top = find_top_of_the_tree();
     std::string output;
@@ -137,7 +146,7 @@ Node<T>* Node<T>::find_node_in_tree(Node<T>* node, const T& data)
 {
     assert(node);
     if (node == nullptr)
-        throw "find_child_in_tree invalid parameter";
+        throw "find_child_in_tree invalid parameter"; // dont use throw, return nullptr or smth
     if (node->data_ == data)
         return node;
     Node<T>* childNode = node->find_child(data);
@@ -155,7 +164,7 @@ Node<T>* Node<T>::find_node_in_tree(Node<T>* node, const T& data)
 template<class T>
 void Node<T>::PrintTree(const Node<T>* top, std::string& outString)
 {
-    unsigned int depth = top->get_depth_of_node();
+    unsigned int depth = top->get_depth_of_node(); // unsigned int -> int
     for (unsigned int i = 0; i < depth; ++i)
         outString.append("-");
     outString.append(top->get_data());
