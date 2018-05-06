@@ -4,6 +4,9 @@
 
 class Tree
 {
+    // consider adding
+    using StringNode = Node<std::string>;
+    
     Node<std::string>* topOfTree;
 
 public:
