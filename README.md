@@ -1,6 +1,8 @@
 # ACMEFarmersMarket
 A C++ project giving to me by employer during a job interview
 
+Use command line argument -t to run unit tests.
+
 See Below for details:
 
 Candidate Evaluation Assignment

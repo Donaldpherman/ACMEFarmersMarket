@@ -6,16 +6,16 @@
 #include "Node.h"
 #include <iostream>
 
-Tree::Tree(): topOfTree(nullptr)
+Tree::Tree(): root(nullptr)
 {
 }
 
 Tree::~Tree()
 {
-    delete topOfTree;
+    delete root;
 }
 
-void Tree::setup_line(const std::string& line)
+void Tree::SetupLine(const std::string& line)
 {
     std::stringstream ss(line);
     std::vector<std::string> tokens;
@@ -29,39 +29,39 @@ void Tree::setup_line(const std::string& line)
     std::string childData = tokens.at(1);
     if (!parentData.empty())
     {
-        Node<std::string>* parentNode = Node<std::string>::find_node_in_tree(topOfTree, parentData);
+        Node<std::string>* parentNode = Node<std::string>::find_node_in_tree(root, parentData);
         if (parentNode == nullptr)
         {
             parentNode = new Node<std::string>(nullptr, parentData);
-            topOfTree = parentNode;
+            root = parentNode;
         }
         parentNode->add_child(childData);
     }
     else
-        topOfTree = new Node<std::string>(nullptr, childData);
+        root = new Node<std::string>(nullptr, childData);
 }
 
-bool Tree::parse_stream(std::istream& stream)
+bool Tree::ParseStream(std::istream& stream)
 {
     std::string line;
     while (std::getline(stream, line))
     {
-        setup_line(line);
+        SetupLine(line);
     }
     return true;
 }
 
 std::string Tree::PrintTree() const
 {
-    return topOfTree->PrintTree();
+    return root->PrintTree();
 }
 
 std::string Tree::PrintLeaves() const
 {
-    return topOfTree->PrintLeaves();
+    return root->PrintLeaves();
 }
 
 std::string Tree::Find(const std::string& name) const
 {
-    return topOfTree->Find(name);
+    return root->Find(name);
 }

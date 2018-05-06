@@ -72,7 +72,7 @@ void Test::PrintTree_test() const
         perror("failed on file open data.txt");
         return;
     }
-    tree.parse_stream(fileStream);
+    tree.ParseStream(fileStream);
     std::string outPut = tree.PrintTree();
     if (outPut != testStringForPrintTree)
         std::cout << ("Error in PrintTree_test\n");
@@ -88,7 +88,7 @@ void Test::PrintLeaves_test() const
         perror("failed on file open data.txt");
         return;
     }
-    tree.parse_stream(fileStream);
+    tree.ParseStream(fileStream);
     std::string outPut = tree.PrintLeaves();
     if (outPut != testStringForPrintLeaves)
         std::cout << ("Error in PrintLeaves_test\n");
@@ -103,7 +103,7 @@ void Test::Find_test() const
         perror("failed on file open data.txt");
         return;
     }
-    tree.parse_stream(fileStream);
+    tree.ParseStream(fileStream);
     std::string outPut = tree.Find("BANANAS");
     if (outPut != testStringForFind)
         std::cout << ("Error in Find_test\n");
@@ -118,7 +118,7 @@ void Test::Find_test__duplicate() const
         perror("failed on file open dataTwo.txt");
         return;
     }
-    tree.parse_stream(fileStream);
+    tree.ParseStream(fileStream);
     std::string outPut = tree.Find("APPLES");
     if (outPut != testStringForFindDuplicate)
         std::cout << ("Error in Find_test__duplicate\n");

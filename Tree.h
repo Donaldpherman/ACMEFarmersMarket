@@ -4,17 +4,17 @@
 
 class Tree
 {
-    Node<std::string>* topOfTree;
+    Node<std::string>* root;
 
 public:
     Tree();
     ~Tree();
 
 private:
-    void setup_line(const std::string& line);
+    void SetupLine(const std::string& line);
 
 public:
-    bool parse_stream(std::istream&);
+    bool ParseStream(std::istream& stream);
     std::string PrintTree() const;
     std::string PrintLeaves() const;
     std::string Find(const std::string& name) const;
