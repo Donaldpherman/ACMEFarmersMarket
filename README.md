@@ -1,5 +1,5 @@
 # ACMEFarmersMarket
-A C++ project giving to me by employer during a job interview
+A C++ project
 
 Use command line argument -t to run unit tests.
 
