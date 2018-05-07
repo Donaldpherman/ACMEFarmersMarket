@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "Tree.h"
-
 #include <vector>
 #include <sstream>
-#include "Node.h"
 #include <iostream>
+
+#include "Tree.h"
+#include "Node.h"
 
 Tree::Tree(): root(nullptr)
 {
@@ -29,13 +29,13 @@ void Tree::SetupLine(const std::string& line)
     std::string childData = tokens.at(1);
     if (!parentData.empty())
     {
-        Node<std::string>* parentNode = Node<std::string>::find_node_in_tree(root, parentData);
+        Node<std::string>* parentNode = Node<std::string>::FindNodeInTree(root, parentData);
         if (parentNode == nullptr)
         {
             parentNode = new Node<std::string>(nullptr, parentData);
             root = parentNode;
         }
-        parentNode->add_child(childData);
+        parentNode->AddChild(childData);
     }
     else
         root = new Node<std::string>(nullptr, childData);

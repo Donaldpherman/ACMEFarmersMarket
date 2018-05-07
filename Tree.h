@@ -4,7 +4,7 @@
 
 class Tree
 {
-    Node<std::string>* root;
+    Node<std::string>* root = nullptr;
 
 public:
     Tree();

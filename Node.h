@@ -15,26 +15,26 @@ public:
 
     ~Node();
 
-    const T& get_data() const;
-    void set_data(const T& data);
-    void add_child(const T& data);
-    void remove_child(const size_t& indx);
-    Node<T>* find_child(const T& data) const;
-    Node<T>* get_child(const size_t& indx) const;
-    const Node<T>* get_parent() const;
-    int get_num_children() const;
-    int get_depth_of_node() const;
-    const Node<T>* find_root_of_the_tree() const;
+    const T& GetData() const;
+    void SetData(const T& data);
+    void AddChild(const T& data);
+    void RemoveChild(const size_t& indx);
+    Node<T>* FindChild(const T& data) const;
+    Node<T>* GetChild(const size_t& indx) const;
+    const Node<T>* GetParent() const;
+    int GetNumChildren() const;
+    int GetDepthOfNode() const;
+    const Node<T>* FindRootOfTheTree() const;
 
     std::string PrintTree() const;
     std::string PrintLeaves() const;
-    std::string Find(const T& name) const;
+    std::string Find(const T& data) const;
 
-    static Node<T>* find_node_in_tree(Node<T>* node, const T& data);
+    static Node<T>* FindNodeInTree(Node<T>* node, const T& data);
 
     static void PrintTree(const Node<T>* top, std::string& outString);
     static void PrintLeaves(const Node<T>* top, std::string& outString);
-    static void Find(const Node<T>* top, const T& name, std::string& outString);
+    static void Find(const Node<T>* top, const T& data, std::string& outString);
 
 };
 #include "Node.inl"
